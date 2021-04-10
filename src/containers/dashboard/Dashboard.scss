@@ -1,0 +1,7 @@
+.dashboard-wrapper {
+    min-height: 100vh;
+    transition: all 2s ease-in-out;
+    &.dark {
+        background: #1c1c1c;
+    }
+}

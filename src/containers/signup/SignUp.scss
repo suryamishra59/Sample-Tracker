@@ -1,0 +1,32 @@
+.register-wrapper {
+    min-height: 100vh;
+    background: #f0f2f6;
+    color: #2d2d2d;
+
+    h1 {
+        margin: 0 20px;
+        font-weight: 500;
+    }
+
+    #signup_email, #signup_pwd {
+        padding: 1em;
+        background: #fff;
+        border-radius: 3px;
+    }
+
+    .btn-nxt {
+        background: #2d2d2d;
+        color: #fff;
+        padding: 1em 1em;
+        border-radius: 3px;
+        font-size: 1rem;
+
+        &:disabled {
+            background: #b3bec0 !important;
+            color: #fff;
+        }
+        &.primary {
+            background: var(--logo-color);
+        }
+    }
+}

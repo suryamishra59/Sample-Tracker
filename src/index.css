@@ -1,0 +1,118 @@
+html, body {
+    min-width: 100%;
+    min-height: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: 'Work Sans', sans-serif;
+}
+
+:root {
+    --secondary-color: #ff0056;
+    --logo-color: #4b33d1;
+}
+
+#root {
+    min-height: 100vh;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-centered {
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+.flex-v-centered {
+    align-items: center;
+}
+
+.flex-h-centered {
+    justify-content: center;
+}
+
+.flex-h-spread-centered {
+    justify-content: space-evenly;
+}
+
+.flex-c-flow {
+    flex-flow: column;
+}
+
+.m-top-1 {
+    margin-top: 1em;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.faded {
+    opacity: 0;
+}
+
+.success {
+    background: rgb(190, 255, 170);
+}
+
+.error {
+    background: rgb(250, 158, 158);
+}
+
+.status-success {
+    color: rgba(60, 231, 60, 0.867);
+}
+
+.status-error {
+    color: rgba(245, 20, 20, 0.867);
+}
+
+a {
+    color: inherit;
+    cursor: pointer;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+i.material-icons {
+    user-select: none;
+}
+
+.rotate90 {
+    transform: rotate(90deg);
+}
+
+.rotate45 {
+    transform: rotate(45deg);
+}
+
+.rotate180 {
+    transform: rotate(180deg);
+}
+
+button:focus, button:hover {
+    outline: none;
+}
+
+@media(max-width: 500px) {}
+
+@media(min-width: 768px) {}

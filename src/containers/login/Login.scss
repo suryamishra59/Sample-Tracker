@@ -1,0 +1,38 @@
+.login-wrapper {
+    min-height: 100vh;
+    background: #f0f2f6;
+    color: #2d2d2d;
+
+    .login-fields {
+        padding: 1em;
+        background: #fff;
+        border-radius: 3px;
+    }
+
+    .btn-login {
+        background: var(--logo-color);
+        color: #fff;
+        padding: 1em 1em;
+        border-radius: 3px;
+        font-size: 1rem;
+        margin-top: 1em;
+
+        &:disabled {
+            background: #b3bec0 !important;
+            color: #fff;
+        }
+    }
+
+    .main-wrapper {
+        width: 20%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-wrapper {
+        .main-wrapper {
+            width: 80%;
+        }
+    }
+}
