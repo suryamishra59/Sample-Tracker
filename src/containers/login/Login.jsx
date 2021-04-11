@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Login.scss';
 import logo from '../../assets/logo.png';
 import { Button, ButtonBase, Divider, InputBase } from '@material-ui/core';
-import { sendOTP, loginUser } from '../../util';
+import { signIn } from '../../server';
+import { LS_USER_OBJECT_KEY } from '../../constant';
+import { sendOTP, postSignIn } from '../../util';
 import { withSnackbar } from 'notistack';
+import { Loader } from '../../components';
+import UserContext from '../../UserContext';
 
 function Login(props) {
     console.log(props);
@@ -11,13 +15,28 @@ function Login(props) {
         emailID: '',
         password: '',
         newPassword: '',
-        loginSuccess: false
+        loginSuccess: false,
+        isLoading: false
     });
+    const { enqueueSnackbar, updateContext } = useContext(UserContext);
 
     const login = async _ => {
-        await loginUser();
-        setstate(prevState => ({ ...prevState, loginSuccess: true }));
-        props.history.push('/portal/dashboard');
+        setstate(prevState => ({ ...prevState, isLoading: true }));
+        try {
+            const resp = await signIn({
+                email_id: state.emailID,
+                password: state.password
+            });
+            localStorage.setItem(LS_USER_OBJECT_KEY, JSON.stringify(resp.data));
+            updateContext();
+            setstate(prevState => ({ ...prevState, loginSuccess: true }));
+            props.history.push('/portal/dashboard');
+        } catch (error) {
+            enqueueSnackbar && enqueueSnackbar(error, {
+                variant: "error"
+            });
+        }
+        setstate(prevState => ({ ...prevState, isLoading: false }));
     };
 
     const sendEmailOTP = async _ => {
@@ -44,6 +63,7 @@ function Login(props) {
 
     return (
         <>
+            <Loader isLoading={state.isLoading} />
             {
                 props.location.pathname === '/login' &&
                 <div className="flex flex-centered flex-c-flow full-width login-wrapper">
@@ -57,7 +77,7 @@ function Login(props) {
                                 <InputBase value={state.emailID} onChange={e => setstate({ ...state, emailID: e.target.value })} placeholder="Email" name="email" required type="email" className="full-width m-top-1 login-fields" />
                                 <InputBase value={state.password} onChange={e => setstate({ ...state, password: e.target.value })} placeholder="Password" name="password" required type="password" className="full-width m-top-1 login-fields" />
 
-                                <ButtonBase focusRipple onClick={login} disabled={!state.emailID || !state.password} className="btn-login">
+                                <ButtonBase focusRipple onClick={login} disabled={!state.emailID || !state.password || state.isLoading} className="btn-login">
                                     Login
                             </ButtonBase>
 

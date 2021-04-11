@@ -6,7 +6,8 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import axios from "axios";
 import { withSnackbar } from 'notistack';
 import { NotFound } from './components';
-import { Home, SignUp, VerifyOTP, Login, Portal } from './containers';
+import { SignUp, VerifyOTP, Login, Portal } from './containers';
+import { LS_USER_OBJECT_KEY } from './constant';
 
 class App extends React.Component {
     socketConnection;
@@ -16,11 +17,13 @@ class App extends React.Component {
         this.state = {
             isAuthenticated: false,
             isMobile: window.matchMedia("(max-width: 768px)").matches,
+            updateContext: this.updateContext
         };
 
     }
 
     componentDidMount() {
+        this.setState({ enqueueSnackbar: this.props.enqueueSnackbar }, _ => this.updateContext());
     }
 
     showNotification(title, body) {
@@ -32,6 +35,14 @@ class App extends React.Component {
             }
         });
     }
+
+    updateContext = _ => {
+        this.setState({
+            isMobile: window.matchMedia("(max-width: 768px)").matches,
+            ...JSON.parse(window.localStorage.getItem(LS_USER_OBJECT_KEY)),
+            isAuthenticated: window.localStorage.getItem(LS_USER_OBJECT_KEY) ? Object.keys(JSON.parse(window.localStorage.getItem(LS_USER_OBJECT_KEY))).length > 3 : false,
+        });
+    };
 
     render() {
 
@@ -85,10 +96,10 @@ class App extends React.Component {
             <ThemeProvider theme={theme}>
                 <Router>
                     <Switch>
-                        <Route path="/login" render={(props) => <UserProvider value={this.state}> <Login {...props} /> </UserProvider>} />
-                        <Route exact path="/otp" render={(props) => <UserProvider value={this.state}> <VerifyOTP {...props} /> </UserProvider>} />
-                        <Route exact path="/signup" render={(props) => <UserProvider value={this.state}> <SignUp {...props} /> </UserProvider>} />
-                        <Route path="/portal" render={(props) => <UserProvider value={this.state}> <Portal {...props} /> </UserProvider>} />
+                        <Route path="/login" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <Login {...props} />} </UserProvider>} />
+                        <Route exact path="/otp" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <VerifyOTP {...props} />} </UserProvider>} />
+                        <Route exact path="/signup" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <SignUp {...props} />}  </UserProvider>} />
+                        <Route path="/portal" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Portal {...props} /> : <Redirect to={'/login'} />}  </UserProvider>} />
                         <Route path="/" render={_ => <Redirect to={this.state.isAuthenticated ? '/portal' : '/login'} />} />
                         <Route component={NotFound} />
                     </Switch>

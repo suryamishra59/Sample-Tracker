@@ -1,0 +1,25 @@
+.loading-icon-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 99999;
+    border-bottom-left-radius: 10px;
+}
+
+.dark .loading-icon-wrapper {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.loading-icon-wrapper img {
+    width: 35px;
+}
+
+@media(max-width: 768px) {
+    .loading-icon-wrapper {
+        left: 0;
+        width: 100%;
+    }
+}
