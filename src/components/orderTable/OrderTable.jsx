@@ -13,11 +13,11 @@ const OrderTable = (props) => {
                     <TableHead>
                         <TableRow>
                             <TableCell />
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)' }}>PO NUMBER</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)' }}>MEMO</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)' }}>CREATED BY</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)' }}>CREATED AT</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)' }}># OF SAMPLES</TableCell>
+                            <TableCell align="left" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>PO NUMBER</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>MEMO</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>CREATED BY</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}># OF SAMPLES</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -65,9 +65,9 @@ function OrderRow(props) {
                         {state.isLoading ? <CircularProgress size={20} color="primary" /> : open ? <i className="material-icons">keyboard_arrow_up</i> : <i className="material-icons">keyboard_arrow_down</i>}
                     </IconButton>
                 </TableCell>
-                <TableCell align="center">{order.po_number}</TableCell>
+                <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>{order.po_number}</TableCell>
                 <TableCell align="center">{order.memo}</TableCell>
-                <TableCell align="center">{order.user.name}</TableCell>
+                <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>{order.user.name}</TableCell>
                 <TableCell align="center">{new Date(order.created_at).toLocaleString()}</TableCell>
                 <TableCell align="center">{order.sampleCount}</TableCell>
             </TableRow>
@@ -82,11 +82,11 @@ function OrderRow(props) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="left"></TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)' }}>SAMPLE ID</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)' }}>MEMO</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)' }}>CREATED AT</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)' }}>LAST STAGE</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)' }}>UPDATED AT</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>SAMPLE ID</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>MEMO</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>LAST STAGE</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>UPDATED AT</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

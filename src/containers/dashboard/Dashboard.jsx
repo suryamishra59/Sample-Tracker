@@ -60,7 +60,7 @@ function Dashboard(props) {
                     </div>
                 </div>
 
-                <div className="flex" style={{ marginTop: '5em', width: isMobile ? '100%' : '70%' }}>
+                <div className="flex" style={{ marginTop: '5em', width: isMobile ? '95%' : '70%' }}>
                     <OrderTable orders={state.orders} />
                 </div>
             </div>

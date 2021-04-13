@@ -1,6 +1,7 @@
 .dashboard-wrapper {
     min-height: calc(100vh - 4.5em);
     background: rgb(238, 238, 238);
+    max-width: 100%;
 
     padding-bottom: 5em;
 
@@ -34,6 +35,22 @@
             h2 {
                 color: #686868;
                 font-weight: 400;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        h1 {
+            font-size: 46px;
+        }
+
+        .cards-container {
+            flex-flow: column;
+
+            .card {
+                margin-top: 1em;
             }
         }
     }
