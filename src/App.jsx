@@ -7,7 +7,9 @@ import axios from "axios";
 import { withSnackbar } from 'notistack';
 import { NotFound } from './components';
 import { SignUp, VerifyOTP, Login, Portal } from './containers';
-import { LS_USER_OBJECT_KEY } from './constant';
+import { LS_USER_OBJECT_KEY, API_REFRESH_TOKEN } from './constant';
+import { invokeAPI } from './util';
+import { refreshAccessToken } from './server';
 
 class App extends React.Component {
     socketConnection;
@@ -44,6 +46,11 @@ class App extends React.Component {
         });
     };
 
+    logout = _ => {
+        localStorage.clear();
+        this.updateContext();
+    };
+
     render() {
 
         const theme = createMuiTheme({
@@ -51,10 +58,10 @@ class App extends React.Component {
                 type: this.state.isDarkThemeEnabled ? 'dark' : 'light',
                 // type: 'dark',
                 primary: {
-                    main: document.documentElement.style.getPropertyValue('--secondary-color') || '#ff0056'
+                    main: document.documentElement.style.getPropertyValue('--logo-color') || '#ff0056'
                 },
                 secondary: {
-                    main: document.documentElement.style.getPropertyValue('--logo-color') || '#4b33d1'
+                    main: document.documentElement.style.getPropertyValue('--secondary-color') || '#4b33d1'
                 }
             },
             typography: {
@@ -66,23 +73,25 @@ class App extends React.Component {
         axios.interceptors.response.use(
             response => response,
             async (error) => {
-                // console.log(error.response);
                 const originalRequest = error.config;
                 if (!error.response || error.response.status !== 401) throw error;
 
                 console.log("401 Unauthorized: Moving Forward to refresh the session");
 
-                // try {
-                //     if (originalRequest.url === DORDER_REFRESH_TOKEN_API) throw new Error("Session Expired");
-                //     await refreshToken();
-                //     await this.updateContext();
-                //     error.response.config.headers.token = window.localStorage.getItem("token");
-                //     return await invokeAPI(error.response.config);
-                // } catch (error) {
-                //     console.log(error.toString());
-                //     this.logout();
-                //     return new Error();
-                // }
+                try {
+                    if (originalRequest.url === API_REFRESH_TOKEN) throw new Error("Session Expired");
+                    const resp = await refreshAccessToken();
+                    localStorage.setItem("accessToken", resp.data.accessToken);
+                    this.updateContext();
+                    error.response.config.headers.token = resp.data.accessToken;
+                    return await axios(error.response.config);
+                } catch (error) {
+                    this.logout();
+                    this.props.enqueueSnackbar("Session Expired. Please login again to continue", {
+                        variant: "error"
+                    });
+                    return { data: { message: "Session Expired", data: [] } };
+                }
             });
 
         if (!("Notification" in window)) {

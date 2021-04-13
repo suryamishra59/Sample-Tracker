@@ -4,9 +4,15 @@ import {
     API_GET_ROLES,
     API_USERS,
     API_SIGNIN,
-    API_REFRESH_TOKEN
+    API_REFRESH_TOKEN,
+    API_ORDERS
 } from './constant';
 
+/* 
+ ********************************************  
+ * AUTH APIs
+ ********************************************
+*/
 export const getRoles = async _ => {
     const request = {
         method: 'GET',
@@ -52,8 +58,42 @@ export const refreshAccessToken = async payload => {
         headers: {
             'Content-Type': 'application/json'
         },
-        data: payload
+        data: {
+            refresh_token: localStorage.getItem("refreshToken")
+        }
     };
 
-    return await invokeAPI(request);;
+    return await invokeAPI(request);
+};
+
+/*
+ ********************************************
+ * ORDER APIs
+ ********************************************
+*/
+
+export const getAllOrders = async _ => {
+    const request = {
+        method: 'GET',
+        url: API_ORDERS,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        },
+    };
+
+    return await invokeAPI(request);
+};
+
+export const getSamplesByOrderID = async orderID => {
+    const request = {
+        method: 'GET',
+        url: `${API_ORDERS}/${orderID}`,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        },
+    };
+
+    return await invokeAPI(request);
 };

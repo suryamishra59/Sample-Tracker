@@ -28,6 +28,8 @@ function Login(props) {
                 password: state.password
             });
             localStorage.setItem(LS_USER_OBJECT_KEY, JSON.stringify(resp.data));
+            localStorage.setItem("accessToken", resp.data.accessToken);
+            localStorage.setItem("refreshToken", resp.data.refreshToken);
             updateContext();
             setstate(prevState => ({ ...prevState, loginSuccess: true }));
             props.history.push('/portal/dashboard');

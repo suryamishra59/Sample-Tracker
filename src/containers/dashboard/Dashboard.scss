@@ -1,7 +1,40 @@
 .dashboard-wrapper {
-    min-height: 100vh;
-    transition: all 2s ease-in-out;
-    &.dark {
-        background: #1c1c1c;
+    min-height: calc(100vh - 4.5em);
+    background: rgb(238, 238, 238);
+
+    padding-bottom: 5em;
+
+    h1 {
+        font-size: 64px;
+        font-weight: 200;
+        color: #686868;
+    }
+
+    .cards-container {
+        margin-top: 3em;
+        .card {
+            padding: 1em;
+            height: 19em;
+            width: 16em;
+            margin: 0 1em;
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+            justify-content: space-evenly;
+
+            .card-icon {
+                border-radius: 50%;
+                width: 4.5em;
+                height: 4.5em;
+                border: 2px solid var(--secondary-color);
+                i {
+                    font-size: 42px;
+                }
+            }
+
+            h2 {
+                color: #686868;
+                font-weight: 400;
+            }
+        }
     }
 }
