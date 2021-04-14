@@ -12,3 +12,6 @@ export * from "./dashboard/Dashboard";
 
 export { default as VerifyOTP } from "./otp/VerifyOTP";
 export * from "./otp/VerifyOTP";
+
+export { default as OrderCreate } from "./orderCreate/OrderCreate";
+export * from "./orderCreate/OrderCreate";

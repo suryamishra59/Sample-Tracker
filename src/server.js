@@ -5,7 +5,8 @@ import {
     API_USERS,
     API_SIGNIN,
     API_REFRESH_TOKEN,
-    API_ORDERS
+    API_ORDERS,
+    API_STAGES
 } from './constant';
 
 /* 
@@ -93,6 +94,40 @@ export const getSamplesByOrderID = async orderID => {
             'Content-Type': 'application/json',
             token: localStorage.getItem("accessToken")
         },
+    };
+
+    return await invokeAPI(request);
+};
+
+export const createOrder = async payload => {
+    const request = {
+        method: 'POST',
+        url: API_ORDERS,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        },
+        data: payload
+    };
+
+    return await invokeAPI(request);
+};
+
+
+/*
+ ********************************************
+ * STAGES APIs
+ ********************************************
+*/
+
+export const getReportsByStageID = async stageID => {
+    const request = {
+        method: 'GET',
+        url: `${API_STAGES}/${stageID}/reports`,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
     };
 
     return await invokeAPI(request);

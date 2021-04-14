@@ -19,7 +19,8 @@ class App extends React.Component {
         this.state = {
             isAuthenticated: false,
             isMobile: window.matchMedia("(max-width: 768px)").matches,
-            updateContext: this.updateContext
+            updateContext: this.updateContext,
+            logout: this.logout
         };
 
     }

@@ -7,6 +7,7 @@ const Header = (props) => {
     const [state, setstate] = useState({
         anchor: false
     });
+    const { logout, isMobile } = useContext(UserContext);
 
     const toggleDrawer = (open) => {
         console.log(open);
@@ -40,8 +41,8 @@ const Header = (props) => {
                     <IconButton edge="start" color="inherit" aria-label="menu" onClick={e => toggleDrawer(true)}>
                         <i className="material-icons">menu</i>
                     </IconButton>
-                    <Typography variant="h6" style={{ fontWeight: 300, margin: 0 }} color="primary">Sample Tracker</Typography>
-                    <Button style={{ marginLeft: 'auto', marginRight: '10px' }} color="secondary">LOGOUT</Button>
+                    <Typography variant="h6" style={{ fontWeight: 300, margin: 0 }} color="primary">{props.heading}</Typography>
+                    <Button style={{ marginLeft: 'auto', marginRight: '10px' }} color="secondary" onClick={logout}>LOGOUT</Button>
                 </Toolbar>
             </AppBar>
 

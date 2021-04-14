@@ -10,7 +10,7 @@ function Dashboard(props) {
         orders: [],
         isLoading: false
     });
-    const { enqueueSnackbar, isMobile, first_name } = useContext(UserContext);
+    const { enqueueSnackbar, isMobile, first_name, role } = useContext(UserContext);
 
     useEffect(() => {
         getOrders().then();
@@ -30,7 +30,7 @@ function Dashboard(props) {
     return (
         <>
             <Loader isLoading={state.isLoading} />
-            <Header />
+            <Header heading="Sample Tracker" />
             <div className="dashboard-wrapper flex flex-c-flow flex-v-centered">
                 <h1>Welcome, {first_name}</h1>
                 <Divider style={{ width: '80%' }} />
@@ -44,7 +44,9 @@ function Dashboard(props) {
                         </div>
                         <div className="flex flex-centered flex-c-flow full-width">
                             <Button color="primary" className="full-width" variant="outlined">My Orders</Button>
-                            <Button color="primary" className="full-width" variant="outlined" style={{ marginTop: '0.5em' }}>Create Order</Button>
+                            {
+                                role.stages.map(r => r.stage).includes('ORDER_CREATED') && <Button color="primary" className="full-width" variant="outlined" style={{ marginTop: '0.5em' }} onClick={e => props.history.push('/portal/orders/create')}>Create Order</Button>
+                            }
                         </div>
                     </div>
                     <div className="card flex flex-c-flow">
