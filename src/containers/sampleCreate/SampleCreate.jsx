@@ -1,19 +1,20 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Input, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
 import React, { useState, useEffect, useContext } from 'react';
 import { Header, Loader } from '../../components';
-import { createOrder, getReportsByStageID } from '../../server';
+import { createOrder, createSample, getReportsByStageID } from '../../server';
 import UserContext from '../../UserContext';
-import './OrderCreate.scss';
+import './SampleCreate.scss';
 
-function OrderCreate(props) {
+function SampleCreate(props) {
     const [state, setstate] = useState({
-        po_number: '',
+        sample_id: '',
         buyer_name: '',
         memo: '',
-        samples: [
+        colors: [
             {
-                sample_id: '',
-                memo: ''
+                color_id: '',
+                memo: '',
+                no_of_pieces: 0
             }
         ]
     });
@@ -28,32 +29,32 @@ function OrderCreate(props) {
         setstate({ ...state, [name]: value });
     };
 
-    const onSampleFieldChange = (e, index) => {
+    const onColorFieldChange = (e, index) => {
         const { name, value } = e.target;
-        const samples = state.samples;
-        samples[index] = {
-            ...state.samples[index],
+        const colors = state.colors;
+        colors[index] = {
+            ...state.colors[index],
             [name]: value
         };
-        setstate({ ...state, samples });
+        setstate({ ...state, colors });
     };
 
-    const addSample = _ => {
-        const samples = state.samples;
-        samples.push({
+    const addColor = _ => {
+        const colors = state.colors;
+        colors.push({
             sample_id: '',
             memo: ''
         });
-        setstate({ ...state, samples });
+        setstate({ ...state, colors });
     };
 
-    const deleteSample = (index) => {
-        const samples = state.samples;
-        samples.splice(index, 1);
-        setstate({ ...state, samples });
+    const deleteColor = (index) => {
+        const colors = state.colors;
+        colors.splice(index, 1);
+        setstate({ ...state, colors });
     };
 
-    const createOrderWithSamples = async _ => {
+    const createOrderWithColors = async _ => {
         const validationResp = validatePayload();
         if (validationResp) {
             enqueueSnackbar && enqueueSnackbar(validationResp, {
@@ -63,18 +64,18 @@ function OrderCreate(props) {
         }
 
         const payload = {
-            order: {
-                po_number: state.po_number,
+            sample: {
+                sample_id: state.sample_id,
                 buyer_name: state.buyer_name,
                 memo: state.memo
             },
-            samples: state.samples
+            colors: state.colors
         };
         setisLoading(true);
 
         try {
-            const createResp = await createOrder(payload);
-            enqueueSnackbar && enqueueSnackbar("Order created succesfully", {
+            const createResp = await createSample(payload);
+            enqueueSnackbar && enqueueSnackbar("Sample created succesfully", {
                 variant: "success"
             });
         } catch (error) {
@@ -88,10 +89,10 @@ function OrderCreate(props) {
     };
 
     const validatePayload = _ => {
-        if (!state.po_number) return "Invalid PO Number";
+        if (!state.sample_id) return "Invalid Sample ID";
         if (!state.buyer_name) return "Invalid Buyer Name";
-        if (!state.samples || state.samples.length <= 0) return "Atleast one sample is required";
-        return state.samples.every(samp => samp.sample_id ? true : false) ? null : "Invalid sample id found";
+        if (!state.colors || state.colors.length <= 0) return "Atleast one sample is required";
+        return state.colors.every(col => (col.color_id && col.no_of_pieces > 0) ? true : false) ? null : "Invalid color details";
     };
 
     return (
@@ -104,34 +105,30 @@ function OrderCreate(props) {
                         !isMobile &&
                         <div className="flex flex-v-centered">
                             <i className="material-icons" style={{ color: 'var(--logo-color)', fontSize: '28px' }}>add_circle</i>
-                            <Typography variant="h5" style={{ marginLeft: '10px', fontWeight: 400 }} color="secondary">Create Order</Typography>
+                            <Typography variant="h5" style={{ marginLeft: '10px', fontWeight: 400 }} color="primary">Create Sample</Typography>
                         </div>
                     }
 
                     <form>
                         <Typography style={{ fontWeight: 400, color: 'red', fontSize: '14px' }} >Fields marked with * are required</Typography>
 
-                        <TextField size="small" value={state.po_number} onChange={onFieldChange} name="po_number" label="PO Number" variant="filled" color="secondary" fullWidth className="create-order-fields" required />
-                        <TextField size="small" value={state.buyer_name} onChange={onFieldChange} name="buyer_name" label="Buyer Name" variant="filled" color="secondary" fullWidth className="create-order-fields" required />
-                        <TextField size="small" value={state.memo} onChange={onFieldChange} name="memo" label="Memo" variant="filled" color="secondary" fullWidth className="create-order-fields" />
+                        <TextField size="small" value={state.sample_id} onChange={onFieldChange} name="sample_id" label="Sample ID" variant="filled" color="primary" fullWidth className="create-order-fields" required />
+                        <TextField size="small" value={state.buyer_name} onChange={onFieldChange} name="buyer_name" label="Buyer Name" variant="filled" color="primary" fullWidth className="create-order-fields" required />
+                        <TextField size="small" value={state.memo} onChange={onFieldChange} name="memo" label="Memo" variant="filled" color="primary" fullWidth className="create-order-fields" />
 
                         <Divider style={{ width: '100%', margin: '2em 0' }} />
 
-                        <Typography variant="h6" style={{ fontWeight: 400, fontSize: '18px', marginBottom: '0.5em' }} color="secondary" >Add Sample(s)</Typography>
+                        <Typography variant="h6" style={{ fontWeight: 400, fontSize: '18px', marginBottom: '0.5em' }} color="secondary" >Add Color(s)</Typography>
 
                         <Table aria-label="collapsible table" className="createOrderTable">
                             <TableBody>
-                                {state.samples.map((sample, index) => <SampleForm sample={sample} index={index} key={index} onChange={e => onSampleFieldChange(e, index)} deleteSample={e => deleteSample(index)} />)}
+                                {state.colors.map((color, index) => <ColorForm color={color} index={index} key={index} onChange={e => onColorFieldChange(e, index)} deleteColor={e => deleteColor(index)} />)}
                             </TableBody>
                         </Table>
 
-                        {/* {
-                            state.samples.map((sample, index) => <SampleForm sample={sample} index={index} key={index} onChange={e => onSampleFieldChange(e, index)} deleteSample={e => deleteSample(index)} />)
-                        } */}
-
-                        <Button variant="outlined" className="m-top-1" color="primary" startIcon={<i className="material-icons">add</i>} onClick={addSample}>Add Sample</Button>
+                        <Button variant="outlined" className="m-top-1" color="secondary" startIcon={<i className="material-icons">add</i>} onClick={addColor}>Add Sample</Button>
                         <br />
-                        <Button variant="contained" className="m-top-1" color="secondary" fullWidth onClick={createOrderWithSamples}>Create Order</Button>
+                        <Button variant="contained" className="m-top-1" color="primary" fullWidth onClick={createOrderWithColors}>Create Order</Button>
 
                     </form>
 
@@ -141,16 +138,16 @@ function OrderCreate(props) {
     );
 }
 
-function SampleForm({ sample, onChange, index, deleteSample }) {
+function ColorForm({ color, onChange, index, deleteColor }) {
     const [open, setopen] = useState(false);
     return (
         <>
             <TableRow className="create-order-row" >
                 <TableCell align="center" >
-                    <TextField size="small" value={sample.sample_id} onChange={onChange} name="sample_id" label="Sample ID" variant="filled" color="secondary" fullWidth className="create-order-fields" required />
+                    <TextField size="small" value={color.color_id} onChange={onChange} name="color_id" label="Color ID" variant="filled" color="secondary" fullWidth className="create-order-fields" required />
                 </TableCell>
                 <TableCell align="center">
-                    <TextField size="small" value={sample.memo} onChange={onChange} name="memo" label="Memo" variant="filled" color="secondary" fullWidth className="create-order-fields" />
+                    <TextField size="small" value={color.no_of_pieces} onChange={onChange} name="no_of_pieces" label="Number of Pieces" variant="filled" color="secondary" fullWidth className="create-order-fields" required type="number" inputProps={{ min: 1 }} />
                 </TableCell>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" color="secondary" onClick={e => setopen(true)}>
@@ -167,16 +164,16 @@ function SampleForm({ sample, onChange, index, deleteSample }) {
                 <DialogTitle>Confirm</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to delete this sample?
+                        Are you sure you want to delete this Color?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={e => setopen(false)} color="primary">Cancel</Button>
-                    <Button onClick={e => { deleteSample(); setopen(false); }} color="primary">Yes, Delete</Button>
+                    <Button onClick={e => { deleteColor(); setopen(false); }} color="primary">Yes, Delete</Button>
                 </DialogActions>
             </Dialog>
         </>
     );
 }
 
-export default OrderCreate;
+export default SampleCreate;

@@ -1,25 +1,25 @@
 import { Button, Divider } from '@material-ui/core';
 import React, { useState, useEffect, useContext } from 'react';
-import { Header, Loader, OrderTable } from '../../components';
-import { getAllOrders } from '../../server';
+import { Header, Loader, SampleTable } from '../../components';
+import { getAllSamples } from '../../server';
 import UserContext from '../../UserContext';
 import './Dashboard.scss';
 
 function Dashboard(props) {
     const [state, setstate] = useState({
-        orders: [],
+        samples: [],
         isLoading: false
     });
     const { enqueueSnackbar, isMobile, first_name, role } = useContext(UserContext);
 
     useEffect(() => {
-        getOrders().then();
+        getSamples().then();
     }, []);
 
-    const getOrders = async _ => {
+    const getSamples = async _ => {
         try {
-            const resp = await getAllOrders();
-            setstate({ ...state, orders: resp.data });
+            const resp = await getAllSamples();
+            setstate({ ...state, samples: resp.data });
         } catch (error) {
             enqueueSnackbar && enqueueSnackbar(error, {
                 variant: "error"
@@ -30,7 +30,7 @@ function Dashboard(props) {
     return (
         <>
             <Loader isLoading={state.isLoading} />
-            <Header heading="Sample Tracker" />
+            <Header heading="Dashboard" />
             <div className="dashboard-wrapper flex flex-c-flow flex-v-centered">
                 <h1>Welcome, {first_name}</h1>
                 <Divider style={{ width: '80%' }} />
@@ -40,12 +40,12 @@ function Dashboard(props) {
                             <div className="card-icon flex flex-centered">
                                 <i style={{ color: 'var(--secondary-color)' }} className="material-icons">dashboard</i>
                             </div>
-                            <h2>Manage Orders</h2>
+                            <h2>Manage Samples</h2>
                         </div>
                         <div className="flex flex-centered flex-c-flow full-width">
-                            <Button color="primary" className="full-width" variant="outlined">My Orders</Button>
+                            <Button color="secondary" className="full-width" variant="outlined">My Samples</Button>
                             {
-                                role.stages.map(r => r.stage).includes('ORDER_CREATED') && <Button color="primary" className="full-width" variant="outlined" style={{ marginTop: '0.5em' }} onClick={e => props.history.push('/portal/orders/create')}>Create Order</Button>
+                                (role && role.stages) && role.stages.map(r => r.stage).includes('ORDER_CREATED') && <Button color="secondary" className="full-width" variant="outlined" style={{ marginTop: '0.5em' }} onClick={e => props.history.push('/portal/samples/create')}>Create Order</Button>
                             }
                         </div>
                     </div>
@@ -57,13 +57,13 @@ function Dashboard(props) {
                             <h2>Manage Accounts</h2>
                         </div>
                         <div className="flex flex-centered flex-c-flow full-width">
-                            <Button color="primary" className="full-width" variant="outlined" disabled>My Account</Button>
+                            <Button color="secondary" className="full-width" variant="outlined" disabled>My Account</Button>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex" style={{ marginTop: '5em', width: isMobile ? '95%' : '70%' }}>
-                    <OrderTable orders={state.orders} />
+                    <SampleTable samples={state.samples} history={props.history} />
                 </div>
             </div>
         </>

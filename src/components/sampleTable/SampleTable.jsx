@@ -1,11 +1,11 @@
 import { Box, CircularProgress, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { getSamplesByOrderID } from '../../server';
+import { getColorsBySampleID } from '../../server';
 import UserContext from '../../UserContext';
-import './OrderTable.scss';
+import './SampleTable.scss';
 
-const OrderTable = (props) => {
-    const orders = props.orders || [];
+const SampleTable = (props) => {
+    const samples = props.samples || [];
     return (
         <>
             <TableContainer component={Paper} elevation={0}>
@@ -13,15 +13,16 @@ const OrderTable = (props) => {
                     <TableHead>
                         <TableRow>
                             <TableCell />
-                            <TableCell align="left" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>PO NUMBER</TableCell>
+                            <TableCell align="left" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>SAMPLE ID</TableCell>
                             <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>MEMO</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>BUYER NAME</TableCell>
                             <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>CREATED BY</TableCell>
                             <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}># OF SAMPLES</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}># OF COLORS</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orders.map(order => <OrderRow order={order} key={order.uuid} />)}
+                        {samples.map(sample => <SampleRow sample={sample} key={sample.uuid} history={props.history} />)}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -29,24 +30,24 @@ const OrderTable = (props) => {
     );
 };
 
-function OrderRow(props) {
-    const { order } = props;
+function SampleRow(props) {
+    const { sample } = props;
     const [open, setOpen] = useState(false);
     const [state, setstate] = useState({
         isLoading: false,
-        samples: []
+        colors: []
     });
     const { enqueueSnackbar } = useContext(UserContext);
 
-    const getSamples = async _ => {
+    const getColors = async _ => {
         if (open) {
             setOpen(false);
             return;
         };
         setstate({ ...state, isLoading: true });
         try {
-            const resp = await getSamplesByOrderID(order.id);
-            setstate({ ...state, samples: resp.data }, _ => setstate({ ...state, isLoading: false }));
+            const resp = await getColorsBySampleID(sample.id);
+            setstate({ ...state, colors: resp.data, isLoading: false });
             setOpen(!open);
         } catch (error) {
             enqueueSnackbar && enqueueSnackbar(error, {
@@ -61,15 +62,16 @@ function OrderRow(props) {
         <React.Fragment>
             <TableRow className="order-row">
                 <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={getSamples}>
-                        {state.isLoading ? <CircularProgress size={20} color="primary" /> : open ? <i className="material-icons">keyboard_arrow_up</i> : <i className="material-icons">keyboard_arrow_down</i>}
+                    <IconButton aria-label="expand row" size="small" onClick={getColors}>
+                        {state.isLoading ? <CircularProgress size={20} color="secondary" /> : open ? <i className="material-icons">keyboard_arrow_up</i> : <i className="material-icons">keyboard_arrow_down</i>}
                     </IconButton>
                 </TableCell>
-                <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>{order.po_number}</TableCell>
-                <TableCell align="center">{order.memo}</TableCell>
-                <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>{order.user.name}</TableCell>
-                <TableCell align="center">{new Date(order.created_at).toLocaleString()}</TableCell>
-                <TableCell align="center">{order.sampleCount}</TableCell>
+                <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>{sample.sample_id}</TableCell>
+                <TableCell align="center">{sample.memo}</TableCell>
+                <TableCell align="center">{sample.buyer_name}</TableCell>
+                <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>{sample.user.name}</TableCell>
+                <TableCell align="center">{new Date(sample.created_at).toLocaleString()}</TableCell>
+                <TableCell align="center">{sample.colorCount}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: open ? '1em' : 0, paddingTop: open ? '1em' : 0 }} colSpan={6}>
@@ -82,27 +84,25 @@ function OrderRow(props) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="left"></TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>SAMPLE ID</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>MEMO</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>COLOR ID</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>No OF PIECES</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>LAST STAGE</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>UPDATED AT</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {
-                                        state.samples.map(sample =>
-                                            <TableRow key={sample.id}>
+                                        state.colors.map(color =>
+                                            <TableRow key={color.id}>
                                                 <TableCell align="left">
-                                                    <IconButton size="small">
+                                                    <IconButton size="small" onClick={e => props.history.push(`/portal/samples/${color.id}/track`)}>
                                                         <i className="material-icons" style={{ color: 'var(--secondary-color)' }}>timeline</i>
                                                     </IconButton>
                                                 </TableCell>
-                                                <TableCell align="left">{sample.sample_id}</TableCell>
-                                                <TableCell align="left">{sample.memo}</TableCell>
-                                                <TableCell align="left">{new Date(sample.created_at).toLocaleString()}</TableCell>
-                                                <TableCell align="left">{sample.latestSampleHistoryRecord.stage.stage_name}</TableCell>
-                                                <TableCell align="left">{new Date(sample.latestSampleHistoryRecord.updated_at).toLocaleString()}</TableCell>
+                                                <TableCell align="left">{color.color_id}</TableCell>
+                                                <TableCell align="left">{color.no_of_pieces}</TableCell>
+                                                <TableCell align="left">{new Date(color.created_at).toLocaleString()}</TableCell>
+                                                <TableCell align="left">{new Date(color.updated_at).toLocaleString()}</TableCell>
                                             </TableRow>)
                                     }
                                 </TableBody>
@@ -115,4 +115,4 @@ function OrderRow(props) {
     );
 }
 
-export default OrderTable;
+export default SampleTable;

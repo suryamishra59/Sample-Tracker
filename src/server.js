@@ -5,7 +5,7 @@ import {
     API_USERS,
     API_SIGNIN,
     API_REFRESH_TOKEN,
-    API_ORDERS,
+    API_SAMPLES,
     API_STAGES
 } from './constant';
 
@@ -69,14 +69,14 @@ export const refreshAccessToken = async payload => {
 
 /*
  ********************************************
- * ORDER APIs
+ * SAMPLES APIs
  ********************************************
 */
 
-export const getAllOrders = async _ => {
+export const getAllSamples = async _ => {
     const request = {
         method: 'GET',
-        url: API_ORDERS,
+        url: API_SAMPLES,
         headers: {
             'Content-Type': 'application/json',
             token: localStorage.getItem("accessToken")
@@ -86,10 +86,10 @@ export const getAllOrders = async _ => {
     return await invokeAPI(request);
 };
 
-export const getSamplesByOrderID = async orderID => {
+export const getColorsBySampleID = async sampleID => {
     const request = {
         method: 'GET',
-        url: `${API_ORDERS}/${orderID}`,
+        url: `${API_SAMPLES}/${sampleID}`,
         headers: {
             'Content-Type': 'application/json',
             token: localStorage.getItem("accessToken")
@@ -99,10 +99,10 @@ export const getSamplesByOrderID = async orderID => {
     return await invokeAPI(request);
 };
 
-export const createOrder = async payload => {
+export const createSample = async payload => {
     const request = {
         method: 'POST',
-        url: API_ORDERS,
+        url: API_SAMPLES,
         headers: {
             'Content-Type': 'application/json',
             token: localStorage.getItem("accessToken")

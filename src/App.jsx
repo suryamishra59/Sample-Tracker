@@ -17,7 +17,7 @@ class App extends React.Component {
         super();
 
         this.state = {
-            isAuthenticated: false,
+            isAuthenticated: window.localStorage.getItem(LS_USER_OBJECT_KEY) ? Object.keys(JSON.parse(window.localStorage.getItem(LS_USER_OBJECT_KEY))).length > 3 : false,
             isMobile: window.matchMedia("(max-width: 768px)").matches,
             updateContext: this.updateContext,
             logout: this.logout
@@ -26,7 +26,10 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        this.updateContext();
         this.setState({ enqueueSnackbar: this.props.enqueueSnackbar }, _ => this.updateContext());
+        document.documentElement.style.setProperty('--secondary-color', '#ff0056');
+        document.documentElement.style.setProperty('--logo-color', '#4b33d1')
     }
 
     showNotification(title, body) {
@@ -59,10 +62,10 @@ class App extends React.Component {
                 type: this.state.isDarkThemeEnabled ? 'dark' : 'light',
                 // type: 'dark',
                 primary: {
-                    main: document.documentElement.style.getPropertyValue('--logo-color') || '#ff0056'
+                    main: document.documentElement.style.getPropertyValue('--logo-color') || '#4b33d1'
                 },
                 secondary: {
-                    main: document.documentElement.style.getPropertyValue('--secondary-color') || '#4b33d1'
+                    main: document.documentElement.style.getPropertyValue('--secondary-color') || '#ff0056'
                 }
             },
             typography: {
@@ -102,15 +105,19 @@ class App extends React.Component {
             Notification.requestPermission().then(console.log);
         }
 
+        console.log('====================================');
+        console.log(this.state.isAuthenticated);
+        console.log('====================================');
+
         return <>
             <ThemeProvider theme={theme}>
                 <Router>
                     <Switch>
-                        <Route path="/login" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <Login {...props} />} </UserProvider>} />
+                        <Route exact path="/login" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <Login {...props} />} </UserProvider>} />
                         <Route exact path="/otp" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <VerifyOTP {...props} />} </UserProvider>} />
                         <Route exact path="/signup" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Redirect to={'/portal'} /> : <SignUp {...props} />}  </UserProvider>} />
                         <Route path="/portal" render={(props) => <UserProvider value={this.state}> {this.state.isAuthenticated ? <Portal {...props} /> : <Redirect to={'/login'} />}  </UserProvider>} />
-                        <Route path="/" render={_ => <Redirect to={this.state.isAuthenticated ? '/portal' : '/login'} />} />
+                        <Redirect exact from="/" to="/portal" />
                         <Route component={NotFound} />
                     </Switch>
                 </Router >

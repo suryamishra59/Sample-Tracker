@@ -7,5 +7,5 @@ export * from "./loader/Loader";
 export { default as Header } from "./header/Header";
 export * from "./header/Header";
 
-export { default as OrderTable } from "./orderTable/OrderTable";
-export * from "./orderTable/OrderTable";
+export { default as SampleTable } from "./sampleTable/SampleTable";
+export * from "./sampleTable/SampleTable";

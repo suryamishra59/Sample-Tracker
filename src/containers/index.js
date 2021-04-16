@@ -13,5 +13,8 @@ export * from "./dashboard/Dashboard";
 export { default as VerifyOTP } from "./otp/VerifyOTP";
 export * from "./otp/VerifyOTP";
 
-export { default as OrderCreate } from "./orderCreate/OrderCreate";
-export * from "./orderCreate/OrderCreate";
+export { default as SampleCreate } from "./sampleCreate/SampleCreate";
+export * from "./sampleCreate/SampleCreate";
+
+export { default as SampleTracker } from "./sampleTracker/SampleTracker";
+export * from "./sampleTracker/SampleTracker";
