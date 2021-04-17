@@ -9,3 +9,6 @@ export * from "./header/Header";
 
 export { default as SampleTable } from "./sampleTable/SampleTable";
 export * from "./sampleTable/SampleTable";
+
+export { default as Tracker } from "./tracker/Tracker";
+export * from "./tracker/Tracker";

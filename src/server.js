@@ -6,7 +6,9 @@ import {
     API_SIGNIN,
     API_REFRESH_TOKEN,
     API_SAMPLES,
-    API_STAGES
+    API_STAGES,
+    API_COLOR_SAMPLE_TYPES,
+    API_COLOR_SAMPLE_HISTORY
 } from './constant';
 
 /* 
@@ -108,6 +110,32 @@ export const createSample = async payload => {
             token: localStorage.getItem("accessToken")
         },
         data: payload
+    };
+
+    return await invokeAPI(request);
+};
+
+export const getColorSampleTypes = async colorID => {
+    const request = {
+        method: 'GET',
+        url: API_COLOR_SAMPLE_TYPES.replace('{color_id}', colorID),
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const getColorSampleHistory = async colorID => {
+    const request = {
+        method: 'GET',
+        url: API_COLOR_SAMPLE_HISTORY.replace('{color_sample_id}', colorID),
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
     };
 
     return await invokeAPI(request);

@@ -12,6 +12,8 @@ module.exports = {
     API_SIGNIN: `${API_BASE_URL}/users/signin`,
     API_REFRESH_TOKEN: `${API_BASE_URL}/users/refresh`,
     API_SAMPLES: `${API_BASE_URL}/samples`,
-    API_STAGES: `${API_BASE_URL}/stages`
+    API_STAGES: `${API_BASE_URL}/stages`,
+    API_COLOR_SAMPLE_TYPES: `${API_BASE_URL}/samples/color/{color_id}/types`,
+    API_COLOR_SAMPLE_HISTORY: `${API_BASE_URL}/samples/color-sample/{color_sample_id}`,
 
 };
