@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { getColorsBySampleID } from '../../server';
+import { downloadReport, getColorsBySampleID } from '../../server';
 import UserContext from '../../UserContext';
 import './SampleTable.scss';
 
@@ -55,7 +55,20 @@ function SampleRow(props) {
             });
             setstate({ ...state, isLoading: false });
         }
+    };
 
+    const downloadSampleReport = async downloadable_file_id => {
+        setstate({ ...state, isLoading: true });
+        try {
+            const resp = await downloadReport(downloadable_file_id);
+            const docWin = window.open();
+            docWin.location.href = resp.data.download_link.url;
+        } catch (error) {
+            enqueueSnackbar && enqueueSnackbar(error, {
+                variant: "error"
+            });
+        }
+        setstate({ ...state, isLoading: false });
     };
 
     return (
@@ -88,6 +101,7 @@ function SampleRow(props) {
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>No OF PIECES</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>UPDATED AT</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>DOWNLOAD QR</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -103,6 +117,11 @@ function SampleRow(props) {
                                                 <TableCell align="left">{color.no_of_pieces}</TableCell>
                                                 <TableCell align="left">{new Date(color.created_at).toLocaleString()}</TableCell>
                                                 <TableCell align="left">{new Date(color.updated_at).toLocaleString()}</TableCell>
+                                                <TableCell align="center">
+                                                    <IconButton color="primary" size="small" onClick={e => downloadSampleReport(color.qr_downloadable_file_id)}>
+                                                        {<i className="material-icons">file_download</i>}
+                                                    </IconButton>
+                                                </TableCell>
                                             </TableRow>)
                                     }
                                 </TableBody>

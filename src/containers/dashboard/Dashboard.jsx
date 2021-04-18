@@ -7,32 +7,14 @@ import './Dashboard.scss';
 
 function Dashboard(props) {
     const [state, setstate] = useState({
-        samples: []
     });
     const [isLoading, setisLoading] = useState(false);
     const { enqueueSnackbar, isMobile, first_name, role } = useContext(UserContext);
 
-    useEffect(() => {
-        getSamples().then();
-    }, []);
-
-    const getSamples = async _ => {
-        setisLoading(true);
-        try {
-            const resp = await getAllSamples();
-            setstate({ ...state, samples: resp.data });
-        } catch (error) {
-            enqueueSnackbar && enqueueSnackbar(error, {
-                variant: "error"
-            });
-        }
-        setisLoading(false);
-    };
-
     return (
         <>
             <Loader isLoading={isLoading} />
-            <Header heading="Dashboard" />
+            <Header heading="Dashboard" {...props} />
             <div className="dashboard-wrapper flex flex-c-flow flex-v-centered">
                 <h1>Welcome, {first_name}</h1>
                 <Divider style={{ width: '80%' }} />
@@ -45,7 +27,7 @@ function Dashboard(props) {
                             <h2>Manage Samples</h2>
                         </div>
                         <div className="flex flex-centered flex-c-flow full-width">
-                            <Button color="secondary" className="full-width" variant="outlined">My Samples</Button>
+                            <Button color="secondary" className="full-width" variant="outlined" onClick={e => props.history.push('/portal/samples')}>My Samples</Button>
                             {
                                 (role && role.stages) && role.stages.map(r => r.stage).includes('ORDER_CREATED') && <Button color="secondary" className="full-width" variant="outlined" style={{ marginTop: '0.5em' }} onClick={e => props.history.push('/portal/samples/create')}>Create Order</Button>
                             }
@@ -63,10 +45,10 @@ function Dashboard(props) {
                         </div>
                     </div>
                 </div>
-
+{/* 
                 <div className="flex" style={{ marginTop: '5em', width: isMobile ? '95%' : '70%' }}>
                     <SampleTable samples={state.samples} history={props.history} />
-                </div>
+                </div> */}
             </div>
         </>
     );

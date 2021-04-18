@@ -1,7 +1,7 @@
 {
-    "short_name": "ToS",
-    "name": "Think of Someone",
-    "description": "Match with your like-minded programmer",
+    "short_name": "ST",
+    "name": "Sample Tracker",
+    "description": "Track your samples as you go in a central place",
     "icons": [
         {
             "src": "images/icon-192x192.png",
@@ -36,7 +36,7 @@
     ],
     "start_url": "/?source=pwa",
     "display": "standalone",
-    "theme_color": "#43b6b6",
+    "theme_color": "#4b33d1",
     "background_color": "#ffffff",
     "scope": "/"
 }

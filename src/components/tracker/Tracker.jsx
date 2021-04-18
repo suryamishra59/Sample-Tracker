@@ -24,7 +24,7 @@ const Tracker = props => {
                         </i>}
                     <StageAccoridion
                         {...props}
-                        id={data[index].id}
+                        id={data[index] ? data[index].id : null}
                         isApproved={data[index] && data[index].status === 1}
                         record={record}
                         index={index}
@@ -52,7 +52,7 @@ const StageAccoridion = props => {
     const [memo, setmemo] = useState("");
 
     useEffect(() => {
-        setmemo(data[index].memo);
+        id && setmemo(data[index].memo || "");
     }, []);
 
     const onFileInputChange = async (e, color_sample_history_id) => {
@@ -82,7 +82,7 @@ const StageAccoridion = props => {
                     <span style={{ fontSize: '12px', color: 'grey' }}>{isApproved && new Date(data[index].updated_at).toLocaleString()}</span>
                 </Typography>
             </AccordionSummary>
-            {!isAccordionDisabled && <AccordionDetails className="tracker-accordion-body flex flex-c-flow">
+            {(!isAccordionDisabled && id) && <AccordionDetails className="tracker-accordion-body flex flex-c-flow">
                 <div className="flex flex-v-centered full-width">
                     <Typography color="secondary" style={{ fontWeight: 400, fontSize: '16px', marginRight: '10px' }}>Documents</Typography>
                     <FormControlLabel
@@ -135,7 +135,7 @@ const StageAccoridion = props => {
                                                         doc.is_deleted === 1 ?
                                                             'Deleted'
                                                             :
-                                                            <IconButton color="primary" size="small" onClick={e => deleteSampleReport(doc.id)}>
+                                                            <IconButton color="primary" size="small" onClick={e => deleteSampleReport(doc.id, data[index].color_sample_id)}>
                                                                 {<i className="material-icons">delete</i>}
                                                             </IconButton>
                                                     }
@@ -189,7 +189,7 @@ const StageAccoridion = props => {
                                 {<i className="material-icons">clear</i>}
                             </IconButton>
                             <IconButton color="primary" size="small" style={{ marginLeft: '20px' }} disabled={!newDocs.file || !newDocs.document_type} onClick={async e => {
-                                await uploadFile(newDocs);
+                                await uploadFile(newDocs, data[index].color_sample_id);
                                 setnewDocs({
                                     file_name: '',
                                     document_type: '',
@@ -211,8 +211,7 @@ const StageAccoridion = props => {
                                 <div className="flex flex-v-centered full-width m-top-1">
                                     <TextField value={memo} size="small" label="Remarks" variant="filled" onChange={e => setmemo(e.target.value)} />
                                     <IconButton color="primary" size="small" style={{ marginLeft: '20px' }} disabled={!memo} onClick={async e => {
-                                        await updateHistoryRecord(data[index].id, { memo: memo });
-                                        setmemo("");
+                                        await updateHistoryRecord(data[index].id, { memo: memo }, data[index].color_sample_id);
                                     }}>
                                         {<i className="material-icons">done</i>}
                                     </IconButton>
@@ -222,10 +221,10 @@ const StageAccoridion = props => {
                 </div>
                 <div className="flex action-button-container m-top-1">
                     {(!isApproved && userAllowedStages.includes(record.id)) && <Button size="small" variant="contained" color="primary" onClick={async e => {
-                        await updateHistoryRecord(data[index].id, { memo: memo, isApproved: true });
+                        await updateHistoryRecord(data[index].id, { memo: memo, isApproved: true }, data[index].color_sample_id);
                     }}>Approve</Button>}
                     {(!isApproved && userAllowedStages.includes(record.id)) && <Button size="small" variant="contained" style={{ marginLeft: '10px' }} onClick={async e => {
-                        await updateHistoryRecord(data[index].id, { memo: memo, isApproved: false });
+                        await updateHistoryRecord(data[index].id, { memo: memo, isApproved: false }, data[index].color_sample_id);
                     }}>Reject</Button>}
                     {/* <Button size="small" color="secondary" variant="contained" style={{ marginLeft: '10px' }}>Save</Button> */}
                 </div>

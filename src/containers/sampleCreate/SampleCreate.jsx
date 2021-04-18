@@ -78,6 +78,8 @@ function SampleCreate(props) {
             enqueueSnackbar && enqueueSnackbar("Sample created succesfully", {
                 variant: "success"
             });
+
+            props.history.push('/portal/samples');
         } catch (error) {
             console.log(error);
             enqueueSnackbar && enqueueSnackbar(error, {
@@ -98,7 +100,7 @@ function SampleCreate(props) {
     return (
         <>
             <Loader isLoading={isLoading} />
-            <Header heading="Create Order" />
+            <Header heading="Create Order" {...props} />
             <div className="create-order-wrapper flex flex-c-flow flex-v-centered">
                 <Paper elevation={isMobile ? 0 : 1} className="flex flex-c-flow inner-wrapper">
                     {

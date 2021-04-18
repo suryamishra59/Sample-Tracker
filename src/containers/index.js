@@ -18,3 +18,6 @@ export * from "./sampleCreate/SampleCreate";
 
 export { default as SampleTracker } from "./sampleTracker/SampleTracker";
 export * from "./sampleTracker/SampleTracker";
+
+export { default as Samples } from "./samples/Samples";
+export * from "./samples/Samples";

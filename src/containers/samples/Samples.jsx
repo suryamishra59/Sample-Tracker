@@ -1,7 +1,6 @@
-import { Button, Divider } from '@material-ui/core';
 import React, { useState, useEffect, useContext } from 'react';
 import { Header, Loader, SampleTable } from '../../components';
-import { downloadReport, getAllSamples } from '../../server';
+import { getAllSamples } from '../../server';
 import UserContext from '../../UserContext';
 import './Samples.scss';
 
@@ -10,7 +9,7 @@ function Samples(props) {
         samples: []
     });
     const [isLoading, setisLoading] = useState(false);
-    const { enqueueSnackbar, isMobile, first_name, role } = useContext(UserContext);
+    const { enqueueSnackbar, isMobile} = useContext(UserContext);
 
     useEffect(() => {
         getSamples().then();
@@ -21,21 +20,6 @@ function Samples(props) {
         try {
             const resp = await getAllSamples();
             setstate({ ...state, samples: resp.data });
-        } catch (error) {
-            enqueueSnackbar && enqueueSnackbar(error, {
-                variant: "error"
-            });
-        }
-        setisLoading(false);
-    };
-
-    const downloadSampleReport = async downloadable_file_id => {
-        setisLoading(true);
-        try {
-            const resp = await downloadReport(downloadable_file_id);
-            setisLoading(false);
-            const docWin = window.open();
-            docWin.location.href = resp.data.download_link.url;
         } catch (error) {
             enqueueSnackbar && enqueueSnackbar(error, {
                 variant: "error"

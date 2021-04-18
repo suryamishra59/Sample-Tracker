@@ -54,20 +54,20 @@ function SampleTracker(props) {
         setisLoading(false);
     };
 
-    const deleteSampleReport = async document_map_id => {
+    const deleteSampleReport = async (document_map_id, color_sample_id) => {
         setisLoading(true);
         try {
             const resp = await deleteReport(document_map_id);
-            getAllColorSampleTypes(true).then();
         } catch (error) {
             enqueueSnackbar && enqueueSnackbar(error, {
                 variant: "error"
             });
         }
+        await getColorSampleHistoryByID(color_sample_id);
         setisLoading(false);
     };
 
-    const uploadFile = async payload => {
+    const uploadFile = async (payload, color_sample_id) => {
         setisLoading(true);
         try {
             const resp = await uploadReport(payload);
@@ -85,11 +85,11 @@ function SampleTracker(props) {
                 variant: "error"
             });
         }
-        getAllColorSampleTypes(true).then();
+        await getColorSampleHistoryByID(color_sample_id);
         setisLoading(false);
     };
 
-    const updateHistoryRecord = async (color_sample_history_id, payload) => {
+    const updateHistoryRecord = async (color_sample_history_id, payload, color_sample_id) => {
         setisLoading(true);
         try {
             const resp = await updateColorSampleHistory(color_sample_history_id, payload);
@@ -99,12 +99,12 @@ function SampleTracker(props) {
                 variant: "error"
             });
         }
-        await getAllColorSampleTypes();
+        await getColorSampleHistoryByID(color_sample_id);
         setisLoading(false);
     };
 
-    const getAllColorSampleTypes = async hideLoader => {
-        !hideLoader && setisLoading(true);
+    const getAllColorSampleTypes = async _ => {
+        setisLoading(true);
         try {
             const [colorSampleTypes, stages, reports] = await Promise.all([
                 getColorSampleTypes(props.match.params.color_id),
@@ -113,8 +113,9 @@ function SampleTracker(props) {
             ]);
             let colorSampleHistory = {};
             if (colorSampleTypes.data.length > 0) {
-                const colorSampleHistories = await Promise.all(colorSampleTypes.data.map(csType => getColorSampleHistory(csType.id)));
-                colorSampleHistories.forEach(hist => hist.data[0] && (colorSampleHistory[hist.data[0].color_sample_id] = hist.data.sort((a, b) => b.color_sample_id - a.color_sample_id)));
+                const firstHistory = await getColorSampleHistory(colorSampleTypes.data[0].id);
+                colorSampleHistory[colorSampleTypes.data[0].id] = firstHistory.data;
+
             }
             setstate({ ...state, colorSampleTypes: colorSampleTypes.data, colorSampleHistory, stages: stages.data, reports: reports.data });
         } catch (error) {
@@ -122,13 +123,21 @@ function SampleTracker(props) {
                 variant: "error"
             });
         }
-        !hideLoader && setisLoading(false);
+        setisLoading(false);
+    };
+
+    const getColorSampleHistoryByID = async (color_sample_id) => {
+        setisLoading(true);
+        const colorSampleHistory = state.colorSampleHistory;
+        const firstHistory = await getColorSampleHistory(color_sample_id);
+        colorSampleHistory[color_sample_id] = firstHistory.data;
+        setisLoading(false);
     };
 
     return (
         <>
             <Loader isLoading={isLoading} />
-            <Header heading="Sample Tracker" />
+            <Header heading="Sample Tracker" {...props} />
             <div className="main-tracker-wrapper flex flex-c-flow flex-v-centered">
                 <div className="main-tracker-container" style={{ width: isMobile ? '100%' : '75%' }}>
                     <AppBar position="static" color="default" elevation={0}>
@@ -141,7 +150,7 @@ function SampleTracker(props) {
                             scrollButtons="auto"
                         >
                             {
-                                state.colorSampleTypes.map((csType, index) => <Tab key={csType.sample_type_id} label={csType.sample_type.display_name} />)
+                                state.colorSampleTypes.map((csType, index) => <Tab key={csType.sample_type_id} label={csType.sample_type.display_name} onClick={e => getColorSampleHistoryByID(csType.id)} />)
                             }
                         </Tabs>
                     </AppBar>
