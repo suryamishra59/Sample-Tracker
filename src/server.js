@@ -8,7 +8,10 @@ import {
     API_SAMPLES,
     API_STAGES,
     API_COLOR_SAMPLE_TYPES,
-    API_COLOR_SAMPLE_HISTORY
+    API_COLOR_SAMPLE_HISTORY,
+    API_ALL_REPORTS,
+    API_SAMPLES_DOCUMENTS,
+    API_UPDATE_COLOR_SAMPLE_HISTORY
 } from './constant';
 
 /* 
@@ -141,6 +144,20 @@ export const getColorSampleHistory = async colorID => {
     return await invokeAPI(request);
 };
 
+export const updateColorSampleHistory = async (color_sample_history_id, payload) => {
+    const request = {
+        method: 'PUT',
+        url: API_UPDATE_COLOR_SAMPLE_HISTORY.replace('{color_sample_history_id}', color_sample_history_id),
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        },
+        data: payload
+    };
+
+    return await invokeAPI(request);
+};
+
 
 /*
  ********************************************
@@ -152,6 +169,85 @@ export const getReportsByStageID = async stageID => {
     const request = {
         method: 'GET',
         url: `${API_STAGES}/${stageID}/reports`,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const getStages = async _ => {
+    const request = {
+        method: 'GET',
+        url: API_STAGES,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const getAllReports = async _ => {
+    const request = {
+        method: 'GET',
+        url: API_ALL_REPORTS,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const downloadReport = async downloadable_file_id => {
+    const request = {
+        method: 'GET',
+        url: `${API_SAMPLES_DOCUMENTS}?downloadable_file_id=${downloadable_file_id}`,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const uploadReport = async payload => {
+    const request = {
+        method: 'POST',
+        url: API_SAMPLES_DOCUMENTS,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        },
+        data: payload
+    };
+
+    return await invokeAPI(request);
+};
+
+export const uploadReportToS3 = async ({ url, contentType, blob }) => {
+    const request = {
+        method: 'PUT',
+        url: url,
+        headers: {
+            'Content-Type': contentType,
+        },
+        data: blob
+    };
+
+    return await invokeAPI(request);
+};
+
+export const deleteReport = async documents_map_id => {
+    const request = {
+        method: 'DELETE',
+        url: `${API_SAMPLES_DOCUMENTS}?documents_map_id=${documents_map_id}`,
         headers: {
             'Content-Type': 'application/json',
             token: localStorage.getItem("accessToken")

@@ -6,10 +6,6 @@ import { Dashboard, SampleCreate, SampleTracker } from '../';
 
 function Portal(props) {
 
-    console.log('====================================');
-    console.log(props);
-    console.log('====================================');
-
     return (
         <>
             <BrowserRouter>

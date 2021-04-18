@@ -1,0 +1,45 @@
+.accordion-container {
+    margin-top: 1em;
+
+    .track-icon {
+        font-size: 26px;
+        color: var(--logo-color);
+        display: block;
+        padding: 8px;
+        // box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        margin-right: 10px;
+
+        &.disabled {
+            color: grey;
+        }
+
+        &.glow:not(.disabled) {
+            animation: glow 0.5s linear infinite alternate;
+        }
+    }
+
+    .tracker-accordion-main {
+        width: 100%;
+        background: rgb(235, 235, 235);
+        border-radius: 5px;
+        &::before {
+            content: none !important;
+        }
+    }
+
+    .tracker-accordion-body {
+        .action-button-container {
+            margin-left: auto;
+        }
+    }
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0px 0px 6px 0px var(--logo-color);
+    }
+    to {
+        box-shadow: 0px 0px 1px 0px var(--logo-color);
+    }
+}

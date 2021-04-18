@@ -7,9 +7,9 @@ import './Dashboard.scss';
 
 function Dashboard(props) {
     const [state, setstate] = useState({
-        samples: [],
-        isLoading: false
+        samples: []
     });
+    const [isLoading, setisLoading] = useState(false);
     const { enqueueSnackbar, isMobile, first_name, role } = useContext(UserContext);
 
     useEffect(() => {
@@ -17,6 +17,7 @@ function Dashboard(props) {
     }, []);
 
     const getSamples = async _ => {
+        setisLoading(true);
         try {
             const resp = await getAllSamples();
             setstate({ ...state, samples: resp.data });
@@ -25,11 +26,12 @@ function Dashboard(props) {
                 variant: "error"
             });
         }
+        setisLoading(false);
     };
 
     return (
         <>
-            <Loader isLoading={state.isLoading} />
+            <Loader isLoading={isLoading} />
             <Header heading="Dashboard" />
             <div className="dashboard-wrapper flex flex-c-flow flex-v-centered">
                 <h1>Welcome, {first_name}</h1>

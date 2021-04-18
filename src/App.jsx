@@ -105,10 +105,6 @@ class App extends React.Component {
             Notification.requestPermission().then(console.log);
         }
 
-        console.log('====================================');
-        console.log(this.state.isAuthenticated);
-        console.log('====================================');
-
         return <>
             <ThemeProvider theme={theme}>
                 <Router>
