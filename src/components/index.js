@@ -12,3 +12,6 @@ export * from "./sampleTable/SampleTable";
 
 export { default as Tracker } from "./tracker/Tracker";
 export * from "./tracker/Tracker";
+
+export { default as ScanQR } from "./scanqr/ScanQR";
+export * from "./scanqr/ScanQR";

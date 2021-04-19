@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Box, Button, CircularProgress, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { downloadReport, getColorsBySampleID } from '../../server';
 import UserContext from '../../UserContext';
@@ -13,12 +13,12 @@ const SampleTable = (props) => {
                     <TableHead>
                         <TableRow>
                             <TableCell />
-                            <TableCell align="left" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>SAMPLE ID</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>MEMO</TableCell>
+                            <TableCell align="left" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>STYLE ID</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>REMARKS</TableCell>
                             <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>BUYER NAME</TableCell>
                             <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>CREATED BY</TableCell>
                             <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
-                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}># OF COLORS</TableCell>
+                            <TableCell align="center" style={{ color: 'var(--secondary-color)', whiteSpace: 'nowrap' }}>No. OF COLORS</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -80,7 +80,7 @@ function SampleRow(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>{sample.sample_id}</TableCell>
-                <TableCell align="center">{sample.memo}</TableCell>
+                <TableCell align="center">{sample.memo || '-'}</TableCell>
                 <TableCell align="center">{sample.buyer_name}</TableCell>
                 <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>{sample.user.name}</TableCell>
                 <TableCell align="center">{new Date(sample.created_at).toLocaleString()}</TableCell>
@@ -96,12 +96,12 @@ function SampleRow(props) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="left"></TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>COLOR ID</TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}></TableCell>
+                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>COLOR</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>No OF PIECES</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>CREATED AT</TableCell>
                                         <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>UPDATED AT</TableCell>
-                                        <TableCell align="left" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>DOWNLOAD QR</TableCell>
+                                        <TableCell align="center" style={{ color: 'var(--logo-color)', whiteSpace: 'nowrap' }}>DOWNLOAD QR</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -109,9 +109,9 @@ function SampleRow(props) {
                                         state.colors.map(color =>
                                             <TableRow key={color.id}>
                                                 <TableCell align="left">
-                                                    <IconButton size="small" onClick={e => props.history.push(`/portal/samples/${color.id}/track`)}>
-                                                        <i className="material-icons" style={{ color: 'var(--secondary-color)' }}>timeline</i>
-                                                    </IconButton>
+                                                    <Button color="secondary" variant="text" size="small" onClick={e => props.history.push(`/portal/samples/${color.id}/track`)} startIcon={<i className="material-icons">timeline</i>}>
+                                                        Track
+                                                    </Button>
                                                 </TableCell>
                                                 <TableCell align="left">{color.color_id}</TableCell>
                                                 <TableCell align="left">{color.no_of_pieces}</TableCell>

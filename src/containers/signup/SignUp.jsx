@@ -14,7 +14,8 @@ function SignUp(props) {
         firstName: '',
         lastName: '',
         roles: [],
-        selectedRole: 0
+        selectedRole: 0,
+        emp_id: ''
     });
     const [activeStep, setActiveStep] = React.useState(0);
     const [isLoading, setisLoading] = React.useState(false);
@@ -39,7 +40,8 @@ function SignUp(props) {
                 last_name: state.lastName,
                 email_id: state.emailID,
                 role_id: state.selectedRole,
-                password: state.password
+                password: state.password,
+                emp_id: state.emp_id
             };
             const resp = await register(payload);
             enqueueSnackbar && enqueueSnackbar(resp.message, {
@@ -92,6 +94,10 @@ function SignUp(props) {
                                     <div className="flex flex-h-centered flex-c-flow" style={{ margin: '0.5em 0' }}>
                                         <label style={{ fontSize: '20px', fontWeight: 400 }} htmlFor="signup_email">Email</label>
                                         <InputBase value={state.emailID} onChange={e => setstate({ ...state, emailID: e.target.value })} placeholder="Email" name="email" required type="email" autoFocus id="signup_email" className="m-top-1 register-fields" />
+                                    </div>
+                                    <div className="flex flex-h-centered flex-c-flow" style={{ margin: '0.5em 0' }}>
+                                        <label style={{ fontSize: '20px', fontWeight: 400 }} htmlFor="emp_id">Employee ID</label>
+                                        <InputBase value={state.emp_id} onChange={e => setstate({ ...state, emp_id: e.target.value })} placeholder="Employee ID" name="emp_id" required autoFocus id="signup_emp_id" className="m-top-1 register-fields" />
                                     </div>
                                 </div>
                                 :

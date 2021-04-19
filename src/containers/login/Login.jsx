@@ -20,7 +20,8 @@ function Login(props) {
     });
     const { enqueueSnackbar, updateContext } = useContext(UserContext);
 
-    const login = async _ => {
+    const login = async e => {
+        e.preventDefault();
         setstate(prevState => ({ ...prevState, isLoading: true }));
         try {
             const resp = await signIn({
@@ -75,16 +76,19 @@ function Login(props) {
                         <div className="flex flex-h-centered flex-c-flow m-top-1 main-wrapper">
                             <h1>Welcome back</h1>
                             <Divider style={{ margin: '15px 0' }} />
-                            <div className="flex flex-c-flow full-width flex-v-centered">
-                                <InputBase value={state.emailID} onChange={e => setstate({ ...state, emailID: e.target.value })} placeholder="Email" name="email" required type="email" className="full-width m-top-1 login-fields" />
-                                <InputBase value={state.password} onChange={e => setstate({ ...state, password: e.target.value })} placeholder="Password" name="password" required type="password" className="full-width m-top-1 login-fields" />
+                            <form onSubmit={login}>
+                                <div className="flex flex-c-flow full-width flex-v-centered">
+                                    <InputBase value={state.emailID} onChange={e => setstate({ ...state, emailID: e.target.value })} placeholder="Email" name="email" required type="email" className="full-width m-top-1 login-fields" />
+                                    <InputBase value={state.password} onChange={e => setstate({ ...state, password: e.target.value })} placeholder="Password" name="password" required type="password" className="full-width m-top-1 login-fields" />
 
-                                <ButtonBase focusRipple onClick={login} disabled={!state.emailID || !state.password || state.isLoading} className="btn-login">
-                                    Login
-                            </ButtonBase>
+                                    <ButtonBase type="submit" focusRipple disabled={!state.emailID || !state.password || state.isLoading} className="btn-login">
+                                        Login
+                                    </ButtonBase>
 
-                                <Button style={{ marginTop: '2em' }} color="secondary" onClick={e => props.history.push('/login/email')}>Trouble logging in?</Button>
-                            </div>
+                                    <Button style={{ marginTop: '2em' }} color="secondary" onClick={e => props.history.push('/signup')}>Sign Up</Button>
+                                    {/* <Button style={{ marginTop: '2em' }} color="secondary" onClick={e => props.history.push('/login/email')}>Trouble logging in?</Button> */}
+                                </div>
+                            </form>
                         </div>
                     }
                 </div>

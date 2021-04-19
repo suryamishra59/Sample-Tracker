@@ -16,7 +16,7 @@ const Tracker = props => {
             stages.map((record, index) => (
                 <div className="flex flex-v-centered accordion-container" key={record.id}>
                     {
-                        !isMobile &&
+                        // !isMobile &&
                         <i
                             className={`material-icons track-icon ${record.id > unApprovedStages[0] ? 'disabled' : ''} ${!(data[index] && data[index].status === 1) ? 'glow' : ''}`}
                         >
@@ -149,7 +149,7 @@ const StageAccoridion = props => {
                         </TableContainer>
 
                         <Typography color="secondary" style={{ fontWeight: 400, fontSize: '16px', marginRight: '10px', marginTop: '1em' }}>Add Documents</Typography>
-                        <div className="flex flex-v-centered full-width m-top-1">
+                        <div className="flex flex-v-centered full-width m-top-1" style={{ flexWrap: 'wrap' }}>
                             <FormControl variant="filled" size="small" style={{ width: '12em' }}>
                                 <InputLabel>Report Type</InputLabel>
                                 <Select
