@@ -4,14 +4,14 @@ import './Tracker.scss';
 import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, FormControlLabel, IconButton, InputLabel, Menu, MenuItem, Paper, Select, Step, StepContent, StepLabel, Stepper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
 
 const Tracker = props => {
-    const { data, stages } = props;
+    const { data, stages, title } = props;
     const { isMobile, role } = useContext(UserContext);
 
     const userAllowedStages = role && role.stages.map(s => s.id);
     const unApprovedStages = data.filter(rec => rec.status !== 1).map(rec => rec.stage_id).sort((a, b) => a - b);
 
     return <>
-        <Typography variant="h5" color="primary">Track Records</Typography>
+        <Typography variant="h5" color="primary">Track Records - {title}</Typography>
         {
             stages.map((record, index) => (
                 <div className="flex flex-v-centered accordion-container" key={record.id}>

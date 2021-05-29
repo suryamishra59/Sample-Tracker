@@ -9,7 +9,7 @@ function Samples(props) {
         samples: []
     });
     const [isLoading, setisLoading] = useState(false);
-    const { enqueueSnackbar, isMobile} = useContext(UserContext);
+    const { enqueueSnackbar, isMobile } = useContext(UserContext);
 
     useEffect(() => {
         getSamples().then();
@@ -34,7 +34,7 @@ function Samples(props) {
             <Header heading="My Samples" {...props} />
             <div className="samples-wrapper flex flex-c-flow flex-v-centered">
                 <div className="flex" style={{ marginTop: '5em', width: isMobile ? '95%' : '70%' }} id="#my_samples">
-                    <SampleTable samples={state.samples} history={props.history} />
+                    <SampleTable samples={state.samples} history={props.history} updateTableData={getSamples} />
                 </div>
             </div>
         </>

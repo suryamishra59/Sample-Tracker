@@ -11,7 +11,8 @@ import {
     API_COLOR_SAMPLE_HISTORY,
     API_ALL_REPORTS,
     API_SAMPLES_DOCUMENTS,
-    API_UPDATE_COLOR_SAMPLE_HISTORY
+    API_UPDATE_COLOR_SAMPLE_HISTORY,
+    API_DETAILED_REPORTS
 } from './constant';
 
 /* 
@@ -118,6 +119,32 @@ export const createSample = async payload => {
     return await invokeAPI(request);
 };
 
+export const deleteSampleByID = async sample_id => {
+    const request = {
+        method: 'DELETE',
+        url: `${API_SAMPLES}/${sample_id}`,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const deleteColorByID = async color_id => {
+    const request = {
+        method: 'DELETE',
+        url: `${API_SAMPLES}/color/${color_id}`,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
 export const getColorSampleTypes = async colorID => {
     const request = {
         method: 'GET',
@@ -195,6 +222,19 @@ export const getAllReports = async _ => {
     const request = {
         method: 'GET',
         url: API_ALL_REPORTS,
+        headers: {
+            'Content-Type': 'application/json',
+            token: localStorage.getItem("accessToken")
+        }
+    };
+
+    return await invokeAPI(request);
+};
+
+export const getDetailReports = async _ => {
+    const request = {
+        method: 'GET',
+        url: API_DETAILED_REPORTS,
         headers: {
             'Content-Type': 'application/json',
             token: localStorage.getItem("accessToken")

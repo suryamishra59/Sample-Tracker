@@ -15,3 +15,6 @@ export * from "./tracker/Tracker";
 
 export { default as ScanQR } from "./scanqr/ScanQR";
 export * from "./scanqr/ScanQR";
+
+export { default as ReportTable } from "./reportTable/ReportTable";
+export * from "./reportTable/ReportTable";

@@ -15,6 +15,7 @@ module.exports = {
     API_SAMPLES_DOCUMENTS: `${API_BASE_URL}/samples/document`,
     API_STAGES: `${API_BASE_URL}/stages`,
     API_ALL_REPORTS: `${API_BASE_URL}/stages/reports`,
+    API_DETAILED_REPORTS: `${API_BASE_URL}/reports`,
     API_COLOR_SAMPLE_TYPES: `${API_BASE_URL}/samples/color/{color_id}/types`,
     API_COLOR_SAMPLE_HISTORY: `${API_BASE_URL}/samples/color-sample/{color_sample_id}`,
     API_UPDATE_COLOR_SAMPLE_HISTORY: `${API_BASE_URL}/samples/color-sample-history/{color_sample_history_id}`,

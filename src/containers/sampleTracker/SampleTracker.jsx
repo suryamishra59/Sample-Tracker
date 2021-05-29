@@ -19,6 +19,13 @@ function SampleTracker(props) {
                 sample_type: {
                     sample_type: "NO_DATA",
                     display_name: "No Samples Found"
+                },
+                color: {
+                    color_id: "",
+                    sample_id: 0,
+                    sample: {
+                        sample: ""
+                    }
                 }
             }
         ],
@@ -164,6 +171,7 @@ function SampleTracker(props) {
                             state.colorSampleTypes.map((csType, index) =>
                                 <div className="tabs" value={state.tabValue} key={csType.id} dir={ThemeProvider.direction}>
                                     <Tracker
+                                        title={`${csType.color.sample.sample} - ${csType.color.color_id}`}
                                         data={state.colorSampleHistory[csType.id] || dummyHistory}
                                         stages={state.stages || []}
                                         reports={state.reports || []}

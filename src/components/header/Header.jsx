@@ -36,6 +36,10 @@ const Header = (props) => {
                     <ListItemIcon><i style={{ color: 'var(--logo-color)' }} className="material-icons">edit</i></ListItemIcon>
                     <ListItemText primary="Create Sample" />
                 </ListItem>
+                <ListItem button onClick={e => props.history.push('/portal/reports')}>
+                    <ListItemIcon><i style={{ color: 'var(--logo-color)' }} className="material-icons">description</i></ListItemIcon>
+                    <ListItemText primary="Reports" />
+                </ListItem>
                 <ListItem button onClick={logout}>
                     <ListItemIcon><i style={{ color: 'var(--logo-color)' }} className="material-icons">logout</i></ListItemIcon>
                     <ListItemText primary="Logout" />

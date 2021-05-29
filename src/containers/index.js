@@ -21,3 +21,6 @@ export * from "./sampleTracker/SampleTracker";
 
 export { default as Samples } from "./samples/Samples";
 export * from "./samples/Samples";
+
+export { default as Reports } from "./reports/Reports";
+export * from "./reports/Reports";
